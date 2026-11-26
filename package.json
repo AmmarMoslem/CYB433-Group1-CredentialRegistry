@@ -1,0 +1,22 @@
+{
+  "name": "cyb433-group1-credential-registry",
+  "version": "1.0.0",
+  "description": "CYB433 Group 1 - Academic Credentials Registry (Ethereum smart contract)",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "coverage": "hardhat coverage",
+    "gas": "REPORT_GAS=true hardhat test",
+    "deploy:sepolia": "hardhat run scripts/deploy.js --network sepolia",
+    "interact:sepolia": "hardhat run scripts/interact.js --network sepolia"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "dotenv": "^16.4.5",
+    "hardhat": "^2.22.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.2"
+  }
+}

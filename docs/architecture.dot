@@ -1,0 +1,22 @@
+digraph G {
+  rankdir=LR; fontname="Arial"; node [fontname="Arial", fontsize=11, color=black]; edge [fontname="Arial", fontsize=9, color=black];
+  subgraph cluster_roles { label="Actors / Roles"; style=dashed;
+    admin [shape=box, label="Admin\n(University Council)\nDEFAULT_ADMIN_ROLE"];
+    issuer [shape=box, label="Issuer\n(Registrar)\nISSUER_ROLE"];
+    approver [shape=box, label="Approver\n(Dean)\nAPPROVER_ROLE"];
+    public [shape=box, label="Public Verifier\n(Employer)"];
+    grad [shape=box, style=dotted, label="Graduate (off-chain)\ndata + salt"];
+  }
+  subgraph cluster_sc { label="CredentialRegistry.sol (Sepolia)"; style=solid;
+    None [shape=circle, label="None"]; Pending [shape=circle, label="Pending"]; Active [shape=doublecircle, label="Active"];
+    Revoked [shape=circle, label="Revoked"]; Rejected [shape=circle, label="Rejected"]; Expired [shape=circle, style=dashed, label="Expired"];
+    None -> Pending [label="issueCredential"]; Pending -> Active [label="approveCredential\n(approver != issuer)"];
+    Pending -> Rejected [label="rejectCredential"]; Active -> Revoked [label="revokeCredential\n(works while paused)"];
+    Active -> Expired [style=dashed, label="time > validUntil"];
+  }
+  ipfs [shape=cylinder, label="IPFS\ncertificate PDF"];
+  admin -> issuer [style=dashed, label="grantRole"]; admin -> approver [style=dashed, label="grantRole"];
+  issuer -> None [label="hash + CID digest"]; approver -> Pending; approver -> Active;
+  grad -> public [style=dotted, label="shares data + salt"]; public -> Active [label="verifyCredential(hash)"];
+  issuer -> ipfs [style=dotted, label="uploads"];
+}
